@@ -63,17 +63,12 @@ fn find_word(matrix: &[Vec<char>], word: &str, start: Position) -> Vec<Vec<Posit
         let mut inner_found = vec![start];
         let mut start = start;
         for searching in word[1..].chars() {
-            let y = start.1 as i32 + change_y;
-            let x = start.0 as i32 + change_x;
-            if x < 0 || y < 0 || y >= matrix.len() as i32 || x >= matrix[0].len() as i32 {
-                continue 'search;
-            }
-            let char = matrix.get(y as usize).and_then(|y| y.get(x as usize));
+            let char = search(matrix, start, &change_x, &change_y);
 
-            if let Some(char) = char {
-                if *char == searching {
-                    inner_found.push((x as usize, y as usize));
-                    start = (x as usize, y as usize);
+            if let Some((pos, char)) = char {
+                if char == searching {
+                    inner_found.push(pos);
+                    start = pos;
                 } else {
                     continue 'search;
                 }
